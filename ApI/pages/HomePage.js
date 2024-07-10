@@ -59,7 +59,9 @@ const HomePage = ({ navigation, cart, setCart, openDrawer }) => {
         const shortDescription = truncateDescription(item.description);
         return (
             <View style={styles.card}>
-                <Image source={{ uri: item.image }} style={styles.cardImage} />
+                <TouchableOpacity onPress={() => navigation.navigate('DetailPage', { item })}>
+                    <Image source={{ uri: item.image }} style={styles.cardImage} />
+                </TouchableOpacity>
                 <View style={styles.textContainer}>
                     <Text style={styles.titleText}>{item.title}</Text>
                     <Text style={styles.descriptionText}>{shortDescription}</Text>

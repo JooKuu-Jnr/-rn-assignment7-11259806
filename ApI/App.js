@@ -5,6 +5,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import Drawer from 'react-native-drawer';
 import HomePage from './pages/HomePage';
 import Checkout from './pages/Checkout';
+import DetailPage from './pages/DetailPage';
 import Sidebar from './components/Sidebar'; // Adjust the import path as necessary
 
 const Stack = createStackNavigator();
@@ -47,6 +48,7 @@ const App = () => {
                     <Stack.Screen name="Checkout">
                         {props => <Checkout {...props} cart={cart} setCart={setCart} openDrawer={openDrawer} />}
                     </Stack.Screen>
+                    <Stack.Screen name="DetailPage" component={DetailPage} />
                 </Stack.Navigator>
             </Drawer>
         </NavigationContainer>
