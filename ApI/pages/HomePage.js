@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, SafeAreaView, Image, TouchableOpacity, FlatList } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const HomePage = ({ navigation, cart, setCart }) => {
+const HomePage = ({ navigation, cart, setCart, openDrawer }) => {
     const [data, setData] = useState([]);
 
     useEffect(() => {
@@ -47,13 +47,22 @@ const HomePage = ({ navigation, cart, setCart }) => {
         }
     };
 
+    const truncateDescription = (description) => {
+        const words = description.split(' ');
+        if (words.length > 50) {
+            return words.slice(0, 50).join(' ') + '...';
+        }
+        return description;
+    };
+
     const renderItem = ({ item }) => {
+        const shortDescription = truncateDescription(item.description);
         return (
             <View style={styles.card}>
                 <Image source={{ uri: item.image }} style={styles.cardImage} />
                 <View style={styles.textContainer}>
                     <Text style={styles.titleText}>{item.title}</Text>
-                    <Text style={styles.descriptionText}>{item.description}</Text>
+                    <Text style={styles.descriptionText}>{shortDescription}</Text>
                     <Text style={styles.priceText}>${item.price}</Text>
                 </View>
                 <TouchableOpacity
@@ -72,9 +81,9 @@ const HomePage = ({ navigation, cart, setCart }) => {
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.Navbar}>
-            <TouchableOpacity>
-                <Image source={require('../assets/Menu.png')} />
-            </TouchableOpacity>
+                <TouchableOpacity onPress={openDrawer}>
+                    <Image source={require('../assets/Menu.png')} />
+                </TouchableOpacity>
                 <Image source={require('../assets/Logo.png')} />
                 <View style={styles.flex}>
                     <Image source={require('../assets/Search.png')} />
