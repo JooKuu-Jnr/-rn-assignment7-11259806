@@ -1,20 +1,23 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, SafeAreaView, Image, TouchableOpacity, FlatList } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const HomePage = ({ navigation, cart, setCart }) => {
-    const data = [
-        { id: '1', image: require('../assets/dress1.png'), title: 'Office Wear', description: 'reversible angora cardigan', price: '$120' },
-        { id: '2', image: require('../assets/dress2.png'), title: 'Black', description: 'reversible angora cardigan', price: '$120' },
-        { id: '3', image: require('../assets/dress3.png'), title: 'Church Wear', description: 'reversible angora cardigan', price: '$120' },
-        { id: '4', image: require('../assets/dress4.png'), title: 'Lamerei', description: 'reversible angora cardigan', price: '$120' },
-        { id: '5', image: require('../assets/dress5.png'), title: '21WN', description: 'reversible angora cardigan', price: '$120' },
-        { id: '6', image: require('../assets/dress6.png'), title: 'Lopo', description: 'reversible angora cardigan', price: '$120' },
-        { id: '7', image: require('../assets/dress7.png'), title: '21WN', description: 'reversible angora cardigan', price: '$120' },
-        { id: '8', image: require('../assets/dress3.png'), title: 'lame', description: 'reversible angora cardigan', price: '$120' },
-    ];
+    const [data, setData] = useState([]);
 
     useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await fetch('https://fakestoreapi.com/products');
+                const result = await response.json();
+                setData(result);
+            } catch (error) {
+                console.error("Failed to fetch data from API:", error);
+            }
+        };
+
+        fetchData();
+
         const fetchCart = async () => {
             try {
                 const savedCart = await AsyncStorage.getItem('cart');
@@ -47,11 +50,11 @@ const HomePage = ({ navigation, cart, setCart }) => {
     const renderItem = ({ item }) => {
         return (
             <View style={styles.card}>
-                <Image source={item.image} style={styles.cardImage} />
+                <Image source={{ uri: item.image }} style={styles.cardImage} />
                 <View style={styles.textContainer}>
                     <Text style={styles.titleText}>{item.title}</Text>
                     <Text style={styles.descriptionText}>{item.description}</Text>
-                    <Text style={styles.priceText}>{item.price}</Text>
+                    <Text style={styles.priceText}>${item.price}</Text>
                 </View>
                 <TouchableOpacity
                     style={styles.button}
@@ -69,7 +72,9 @@ const HomePage = ({ navigation, cart, setCart }) => {
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.Navbar}>
+            <TouchableOpacity>
                 <Image source={require('../assets/Menu.png')} />
+            </TouchableOpacity>
                 <Image source={require('../assets/Logo.png')} />
                 <View style={styles.flex}>
                     <Image source={require('../assets/Search.png')} />
@@ -96,7 +101,7 @@ const HomePage = ({ navigation, cart, setCart }) => {
             <FlatList
                 data={data}
                 renderItem={renderItem}
-                keyExtractor={item => item.id}
+                keyExtractor={item => item.id.toString()}
                 numColumns={2}
                 columnWrapperStyle={styles.column}
                 contentContainerStyle={styles.layout}
