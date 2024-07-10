@@ -19,14 +19,20 @@ const App = () => {
         }
     };
 
+    const closeDrawer = () => {
+        if (drawerRef.current) {
+            drawerRef.current.close();
+        }
+    };
+
     return (
         <NavigationContainer>
             <Drawer
                 ref={drawerRef}
-                content={<Sidebar />}
+                content={<Sidebar closeDrawer={closeDrawer} />}
                 type="overlay"
                 tapToClose={true}
-                openDrawerOffset={0.2} // 20% gap on the right side of the drawer
+                openDrawerOffset={0.2} // Adjust this value to set the gap on the right side of the drawer
                 panCloseMask={0.2}
                 closedDrawerOffset={-3}
                 styles={{
@@ -39,7 +45,7 @@ const App = () => {
                         {props => <HomePage {...props} cart={cart} setCart={setCart} openDrawer={openDrawer} />}
                     </Stack.Screen>
                     <Stack.Screen name="Checkout">
-                        {props => <Checkout {...props} cart={cart} setCart={setCart} />}
+                        {props => <Checkout {...props} cart={cart} setCart={setCart} openDrawer={openDrawer} />}
                     </Stack.Screen>
                 </Stack.Navigator>
             </Drawer>

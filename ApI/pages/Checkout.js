@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, SafeAreaView, Image, TouchableOpacity, FlatList } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const Checkout = ({ navigation, cart, setCart }) => {
+const Checkout = ({ navigation, cart, setCart, openDrawer }) => {
     const [storedCart, setStoredCart] = useState([]);
     const [totalPrice, setTotalPrice] = useState(0);
 
@@ -43,7 +43,7 @@ const Checkout = ({ navigation, cart, setCart }) => {
     const renderItem = ({ item }) => {
         return (
             <View style={styles.itemContainer}>
-                <Image source={item.image} style={styles.itemImage} />
+                <Image source={{ uri: item.image }} style={styles.itemImage} />
                 <View style={styles.textContainer}>
                     <Text style={styles.titleText}>{item.title.toUpperCase()}</Text>
                     <Text style={styles.descriptionText}>{item.description}</Text>
@@ -64,34 +64,34 @@ const Checkout = ({ navigation, cart, setCart }) => {
 
     return (
         <SafeAreaView style={styles.container}>
-            <View style={styles.overview}>
-                <View style={styles.navbar}>
-                    <View style={styles.flex}>
-                        <Image source={require('../assets/Logo.png')} />
-                    </View>
-                    <View style={styles.flex}>
-                        <Image source={require('../assets/Search.png')} />
-                    </View>
-                </View>
-
-                <View style={styles.header}>
-                    <Text style={styles.headerText}>CHECKOUT</Text>
-                </View>
-                <FlatList
-                    data={storedCart}
-                    renderItem={renderItem}
-                    keyExtractor={item => item.id}
-                    contentContainerStyle={styles.listContainer}
-                    showsVerticalScrollIndicator={false}
-                />
-
-                <View style={styles.footer}>
-                    <View style={styles.row}> 
-                        <Text style={styles.totalText}>EST. TOTAL:</Text>
-                        <Text style={styles.totalText}>${totalPrice.toFixed(2)}</Text>
-                    </View>
+            <View style={styles.Navbar}>
+                <TouchableOpacity onPress={openDrawer}>
+                    <Image source={require('../assets/Menu.png')} />
+                </TouchableOpacity>
+                <Image source={require('../assets/Logo.png')} />
+                <View style={styles.flex}>
+                    <Image source={require('../assets/Search.png')} />
                 </View>
             </View>
+
+            <View style={styles.header}>
+                <Text style={styles.headerText}>CHECKOUT</Text>
+            </View>
+            <FlatList
+                data={storedCart}
+                renderItem={renderItem}
+                keyExtractor={item => item.id.toString()}
+                contentContainerStyle={styles.listContainer}
+                showsVerticalScrollIndicator={false}
+            />
+
+            <View style={styles.footer}>
+                <View style={styles.row}> 
+                    <Text style={styles.totalText}>EST. TOTAL:</Text>
+                    <Text style={styles.totalText}>${totalPrice.toFixed(2)}</Text>
+                </View>
+            </View>
+
             <TouchableOpacity style={styles.checkoutButton}>
                 <Image source={require('../assets/shoppingBag.png')} style={styles.whiteImage} />
                 <Text style={styles.checkoutText}>CHECKOUT</Text>
@@ -104,17 +104,17 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
     },
-    overview: {
-        flex: 1,
-        margin: 20,
-    },
-    navbar: {
+    Navbar: {
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'space-between',
+        paddingHorizontal: 20,
+        paddingVertical: 10,
+        borderBottomWidth: 1,
+        borderBottomColor: '#ccc',
     },
     flex: {
-        marginLeft: 'auto'
+        flexDirection: 'row',
     },
     header: {
         alignItems: 'center',
@@ -126,6 +126,7 @@ const styles = StyleSheet.create({
     },
     listContainer: {
         marginTop: 20,
+        paddingHorizontal: 20,
     },
     itemContainer: {
         flexDirection: 'row',
@@ -163,29 +164,35 @@ const styles = StyleSheet.create({
     },
     row: {
         flexDirection: 'row',
-        justifyContent: 'space-between'
+        justifyContent: 'space-between',
+        paddingHorizontal: 20,
     },
     totalText: {
         fontSize: 20,
         fontWeight: '500',
     },
+    footer: {
+        borderTopWidth: 1,
+        borderTopColor: '#ccc',
+        paddingVertical: 10,
+    },
     checkoutButton: {
         flexDirection: 'row',
-        width: 'auto',
+        width: '100%',
         height: 70,
         backgroundColor: 'black',
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
     },
     whiteImage: {
-        tintColor: 'white'
+        tintColor: 'white',
     },
     checkoutText: {
         marginLeft: 5,
         color: 'white',
         textAlign: 'center',
         fontSize: 20,
-    }
+    },
 });
 
 export default Checkout;
