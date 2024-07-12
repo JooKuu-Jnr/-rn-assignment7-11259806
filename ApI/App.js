@@ -30,7 +30,7 @@ const App = () => {
         <NavigationContainer>
             <Drawer
                 ref={drawerRef}
-                content={<Sidebar closeDrawer={closeDrawer} />}
+                content={<Sidebar closeDrawer={closeDrawer} navigation={drawerRef.current?.props?.navigation} />}
                 type="overlay"
                 tapToClose={true}
                 openDrawerOffset={0.2} // Adjust this value to set the gap on the right side of the drawer
@@ -48,7 +48,9 @@ const App = () => {
                     <Stack.Screen name="Checkout">
                         {props => <Checkout {...props} cart={cart} setCart={setCart} openDrawer={openDrawer} />}
                     </Stack.Screen>
-                    <Stack.Screen name="DetailPage" component={DetailPage} />
+                    <Stack.Screen name="DetailPage">
+                        {props => <DetailPage {...props} cart={cart} setCart={setCart} />}
+                    </Stack.Screen>
                 </Stack.Navigator>
             </Drawer>
         </NavigationContainer>

@@ -49,8 +49,8 @@ const HomePage = ({ navigation, cart, setCart, openDrawer }) => {
 
     const truncateDescription = (description) => {
         const words = description.split(' ');
-        if (words.length > 50) {
-            return words.slice(0, 50).join(' ') + '...';
+        if (words.length > 15) {
+            return words.slice(0, 15).join(' ') + '...';
         }
         return description;
     };

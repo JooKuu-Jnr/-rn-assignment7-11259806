@@ -10,7 +10,7 @@ const Checkout = ({ navigation, cart, setCart, openDrawer }) => {
         const fetchCart = async () => {
             try {
                 const savedCart = await AsyncStorage.getItem('cart');
-                if (savedCart) {
+                if (savedCart !== null) {
                     const cartItems = JSON.parse(savedCart);
                     setStoredCart(cartItems);
                     calculateTotal(cartItems);
@@ -23,8 +23,12 @@ const Checkout = ({ navigation, cart, setCart, openDrawer }) => {
         fetchCart();
     }, []);
 
+    useEffect(() => {
+        calculateTotal(storedCart);
+    }, [storedCart]);
+
     const calculateTotal = (cartItems) => {
-        const total = cartItems.reduce((sum, item) => sum + parseFloat(item.price.replace('$', '')), 0);
+        const total = cartItems.reduce((sum, item) => sum + parseFloat(item.price), 0);
         setTotalPrice(total);
     };
 
@@ -47,7 +51,7 @@ const Checkout = ({ navigation, cart, setCart, openDrawer }) => {
                 <View style={styles.textContainer}>
                     <Text style={styles.titleText}>{item.title.toUpperCase()}</Text>
                     <Text style={styles.descriptionText}>{item.description}</Text>
-                    <Text style={styles.priceText}>{item.price}</Text>
+                    <Text style={styles.priceText}>${item.price}</Text>
                 </View>
                 <TouchableOpacity
                     style={styles.removeButton}
